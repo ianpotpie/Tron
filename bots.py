@@ -5,6 +5,8 @@ from tronproblem import *
 from trontypes import CellType, PowerupType
 import random, math
 
+#import the algoriths for our bot
+
 # Throughout this file, ASP means adversarial search problem.
 
 
@@ -20,7 +22,7 @@ class StudentBot:
         state by calling asp.get_start_state()
         """
         return "U"
-    
+
     def cleanup(self):
         """
         Input: None
@@ -52,7 +54,7 @@ class RandBot:
         if possibilities:
             return random.choice(possibilities)
         return "U"
-    
+
     def cleanup(self):
         pass
 

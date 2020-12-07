@@ -1,9 +1,13 @@
 #!/usr/bin/python
 
 import numpy as np
+from bot_algorithms.alpha_beta_cutoff import alpha_beta_cutoff
+from bot_algorithms.naive_voronoi import naive_voronoi
 from tronproblem import *
 from trontypes import CellType, PowerupType
 import random, math
+
+#import the algoriths for our bot
 
 # Throughout this file, ASP means adversarial search problem.
 
@@ -19,8 +23,9 @@ class StudentBot:
         To get started, you can get the current
         state by calling asp.get_start_state()
         """
-        return "U"
-    
+        return alpha_beta_cutoff(asp,3,naive_voronoi)
+        # return "U"
+
     def cleanup(self):
         """
         Input: None
@@ -52,7 +57,7 @@ class RandBot:
         if possibilities:
             return random.choice(possibilities)
         return "U"
-    
+
     def cleanup(self):
         pass
 

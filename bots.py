@@ -2,7 +2,7 @@
 
 import numpy as np
 from bot_algorithms.alpha_beta_cutoff import alpha_beta_cutoff
-from bot_algorithms.naive_voronoi import naive_voronoi
+from bot_algorithms.voronoi_heuristic import naive_voronoi
 from tronproblem import *
 from trontypes import CellType, PowerupType
 import random, math
@@ -24,7 +24,7 @@ class StudentBot:
         state by calling asp.get_start_state()
         """
         print("Student bot ran decide")
-        direction = alpha_beta_cutoff(asp, 2, naive_voronoi)
+        direction = alpha_beta_cutoff(asp, 10, naive_voronoi)
         print(direction)
         return direction
         # return "U"

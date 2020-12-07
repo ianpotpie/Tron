@@ -1,3 +1,5 @@
+import math
+
 def alpha_beta_cutoff(asp, cutoff_ply, eval_func):
     """
     This function should:
@@ -30,8 +32,8 @@ def alpha_beta_cutoff(asp, cutoff_ply, eval_func):
     start_state = asp.get_start_state()
     player = start_state.player_to_move()
     optimal_move = None
-    alpha = float("-inf")  # note - alpha at the initial state is the same as the max score
-    beta = float("inf")
+    alpha = -math.inf  # note - alpha at the initial state is the same as the max score
+    beta = math.inf
 
     # finding the best move
     for action in asp.get_available_actions(start_state):
@@ -42,6 +44,7 @@ def alpha_beta_cutoff(asp, cutoff_ply, eval_func):
             alpha = next_score
             optimal_move = action
 
+    print("optimal move is:", optimal_move)
     return optimal_move
 
 

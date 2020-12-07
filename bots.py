@@ -23,7 +23,10 @@ class StudentBot:
         To get started, you can get the current
         state by calling asp.get_start_state()
         """
-        return alpha_beta_cutoff(asp,3,naive_voronoi)
+        print("Student bot ran decide")
+        direction = alpha_beta_cutoff(asp, 2, naive_voronoi)
+        print(direction)
+        return direction
         # return "U"
 
     def cleanup(self):

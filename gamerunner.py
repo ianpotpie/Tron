@@ -5,6 +5,7 @@ from collections import defaultdict
 import support
 import random
 import numpy as np
+import traceback
 
 
 def run_game(asp, bots, visualizer=None, delay=0.2, max_wait=0.3, colored=True):
@@ -38,7 +39,8 @@ They will go UP this round."""
                     % (state.ptm + 1)
                 )
             decision = "U"
-        except: # pylint: disable=bare-except
+        except:  # Exception:
+            # traceback.print_exc()  # pylint: disable=bare-except
             if visualizer:
                 print(
                     """Warning. The move for player %s encountered an unexpected error.
@@ -77,7 +79,7 @@ def main():
         "-max_wait",
         type=float,
         help=HelpMessage.MAX_WAIT,
-        default=Argument_Defaults.MAX_WAIT,
+        default= Argument_Defaults.MAX_WAIT,
     )
     parser.add_argument(
         "-bots",
@@ -137,7 +139,7 @@ def main():
 
 class Argument_Defaults:
     MAP = "./maps/small_room.txt"
-    MAX_WAIT = 1.0
+    MAX_WAIT = 1.0 # * 10000
     BOTS = ["random", "random"]
     IMAGE_DELAY = 0.2
 

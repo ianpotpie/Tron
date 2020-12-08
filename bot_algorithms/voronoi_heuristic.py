@@ -82,8 +82,7 @@ def voronoi_v1(state):
         next_frontier = set()
         # adds the frontier to the voronoi space, and expands where it can
         for cell in frontier_sets[expanding_player]:
-            frontier_sets[expanding_player].remove(cell)
-
+            # get the cell info
             cell_row = cell[0]
             cell_col = cell[1]
             cell_val = board[cell_row][cell_col]
@@ -113,6 +112,9 @@ def voronoi_v1(state):
             player_score += len(voronoi)
         else:
             player_score -= len(voronoi)
+
+    print(player_score)
+    return player_score
 
 
 ########################################################################################################################
@@ -152,7 +154,6 @@ def voronoi_v2(state):
         next_frontier = set()
         # adds the frontier to the voronoi space, and expands where it can
         for cell in frontier_sets[expanding_player]:
-            frontier_sets[expanding_player].remove(cell)
 
             cell_row = cell[0]
             cell_col = cell[1]
@@ -184,6 +185,7 @@ def voronoi_v2(state):
         else:
             player_score -= size
 
+    return player_score
 
 
 

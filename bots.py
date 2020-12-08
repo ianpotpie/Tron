@@ -23,7 +23,7 @@ class StudentBot:
         To get started, you can get the current
         state by calling asp.get_start_state()
         """
-        direction = alpha_beta_cutoff(asp, 5, naive_voronoi)
+        direction = alpha_beta_cutoff(asp, 5, voronoi_v2)
         return direction
         # return "U"
 

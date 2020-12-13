@@ -27,7 +27,7 @@ class StudentBot:
         state by calling asp.get_start_state()
         """
         # direction = alpha_beta_cutoff2(asp, 5)
-        direction = alpha_beta_cutoff(asp, 9, voronoi_v2)
+        direction = alpha_beta_cutoff(asp, 7, voronoi_v2)
         return direction
         # return "U"
 

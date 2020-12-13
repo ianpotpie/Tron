@@ -140,11 +140,7 @@ def voronoi_v2(state, curr_player):
     explored_cells = set(player_locs)
 
     # initialize the frontiers with the coordinates of the cells surrounding each player
-    frontier_sets = \
-        [{(loc[0] + 1, loc[1]),
-          (loc[0] - 1, loc[1]),
-          (loc[0], loc[1] + 1),
-          (loc[0], loc[1] - 1)} for loc in player_locs]
+    frontier_sets = [{(loc[0], loc[1])} for loc in player_locs]
 
     # We cycle through the players in the order that their turns will take place. We begin with the player who is about
     # to move. We know we are done when there are no cells left to explore
@@ -154,24 +150,32 @@ def voronoi_v2(state, curr_player):
         next_frontier = set()
         # adds the frontier to the voronoi space, and expands where it can
         for cell in frontier_sets[expanding_player]:
+            explored_cells.add(cell)
+            voronoi_sizes[expanding_player] += 1
 
-            cell_row = cell[0]
-            cell_col = cell[1]
-            cell_val = board[cell_row][cell_col]
+            def viable_cell(cell_row, cell_col):
+                val = board[cell_row][cell_col]
+                return ((cell_row, cell_col) not in explored_cells) and (val != 'x') and (val != '#')
+
+            row = cell[0]
+            col = cell[1]
 
             # if the cell is available, then it is added to the voronoi and expand the frontier
-            if (cell not in explored_cells) and (cell_val != 'x') and (cell_val != '#'):
-                explored_cells.add(cell)
-                voronoi_sizes[expanding_player] += 1
-                next_frontier.add((cell_row + 1, cell_col))
-                next_frontier.add((cell_row - 1, cell_col))
-                next_frontier.add((cell_row, cell_col + 1))
-                next_frontier.add((cell_row, cell_col - 1))
+            if viable_cell(row+1, col):
+                next_frontier.add((row + 1, col))
+            if viable_cell(row-1, col):
+                next_frontier.add((row - 1, col))
+            if viable_cell(row, col+1):
+                next_frontier.add((row, col + 1))
+            if viable_cell(row, col-1):
+                next_frontier.add((row, col - 1))
 
         # update the frontier and begin calculating the voronoi space of the new
         frontier_sets[expanding_player] = next_frontier
         if len(next_frontier) == 0:
             empty_frontiers += 1
+        else:
+            empty_frontiers = 0
         expanding_player = (expanding_player + 1) % num_players
 
     # the player's score is tallied by taking the difference between the size of their voronoi, and
@@ -181,7 +185,78 @@ def voronoi_v2(state, curr_player):
         if player == curr_player:
             player_score += size
         else:
-            player_score -= size
+            player_score -= size / (num_players - 1)
+
+    return player_score
+
+########################################################################################################################
+
+
+def voronoi_v3(state, curr_player):
+    """
+    Input:
+        A Game State
+    Output:
+        The Score of the player to move based on the voronoi metric. This cycles through the players in the order of
+        the their turns to avoid conflicting frontiers (from evaluating at the same time).
+    """
+
+    # initialize game info
+    player_locs = state.player_locs
+    num_players = len(player_locs)
+    voronoi_sizes = np.zeros(num_players)
+    board = state.board
+
+    # initialize the voronoi cells for each player with the cell that they currently occupy
+    explored_cells = set(player_locs)
+
+    # initialize the frontiers with the coordinates of the cells surrounding each player
+    frontier_sets = [{(loc[0], loc[1])} for loc in player_locs]
+
+    # We cycle through the players in the order that their turns will take place. We begin with the player who is about
+    # to move. We know we are done when there are no cells left to explore
+    expanding_player = curr_player
+    empty_frontiers = 0
+    while empty_frontiers < num_players:
+        next_frontier = set()
+        # adds the frontier to the voronoi space, and expands where it can
+        for cell in frontier_sets[expanding_player]:
+            explored_cells.add(cell)
+            voronoi_sizes[expanding_player] += 1
+
+            def viable_cell(cell_row, cell_col):
+                val = board[cell_row][cell_col]
+                return ((cell_row, cell_col) not in explored_cells) and (val != 'x') and (val != '#')
+
+            row = cell[0]
+            col = cell[1]
+
+            # if the cell is available, then it is added to the voronoi and expand the frontier
+            if viable_cell(row+1, col):
+                next_frontier.add((row + 1, col))
+            if viable_cell(row-1, col):
+                next_frontier.add((row - 1, col))
+            if viable_cell(row, col+1):
+                next_frontier.add((row, col + 1))
+            if viable_cell(row, col-1):
+                next_frontier.add((row, col - 1))
+
+        # update the frontier and begin calculating the voronoi space of the new
+        frontier_sets[expanding_player] = next_frontier
+        if len(next_frontier) == 0:
+            empty_frontiers += 1
+        else:
+            empty_frontiers = 0
+        expanding_player = (expanding_player + 1) % num_players
+
+    # the player's score is tallied by taking the difference between the size of their voronoi, and
+    # the sum of the sizes of all the other player's voronoi spaces
+    player_score = 0
+    for player, size in enumerate(voronoi_sizes):
+        if player == curr_player:
+            player_score += size
+        else:
+            player_score -= size / (num_players - 1)
 
     return player_score
 

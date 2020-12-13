@@ -3,7 +3,7 @@ import math
 from queue import PriorityQueue
 
 
-def alpha_beta_cutoff2( asp, cutoff_ply):
+def alpha_beta_cutoff2(asp, cutoff_ply):
     """
     This function should:
     - search through the asp using alpha-beta pruning
@@ -67,7 +67,7 @@ def max_value_ab_cutoff( asp, state, player, alpha, beta, cutoff_ply):
     return max_payoff
 
 
-def voronoi( player, state):
+def voronoi(state, player):
     """
     Input: state, a state in a TronProblem. player, index for player in game
     Output: number represneting voronoi heuristic evaluation of state

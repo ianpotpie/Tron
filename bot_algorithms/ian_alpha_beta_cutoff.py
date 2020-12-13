@@ -59,7 +59,10 @@ def cutoff_ab_max_value(asp, state, player, alpha, beta, depth, eval_func):
               attain from a state assuming optimal game play by both players
     """
     if asp.is_terminal_state(state):
-        return asp.evaluate_state(state)[player]
+        if asp.evaluate_state(state)[player]:
+            return math.inf
+        else:
+            return -math.inf
     elif depth == 0:
         return eval_func(state,player)
     else:
@@ -86,11 +89,14 @@ def cutoff_ab_min_value(asp, state, player, alpha, beta, depth, eval_func):
               attain from a state assuming optimal game play by both players
     """
     if asp.is_terminal_state(state):
-        return asp.evaluate_state(state)[player]
+        if asp.evaluate_state(state)[player]:
+            return math.inf
+        else:
+            return -math.inf
     elif depth <= 0:
         return eval_func(state,  player)
     else:
-        min_score = float("inf")
+        min_score = math.inf
         for action in asp.get_available_actions(state):
             next_state = asp.transition(state, action)
             next_score = cutoff_ab_max_value(asp, next_state, player, alpha, beta, depth - 1, eval_func)

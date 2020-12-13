@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 import numpy as np
-from bot_algorithms.alpha_beta_cutoff import alpha_beta_cutoff
+from bot_algorithms.ian_alpha_beta_cutoff import alpha_beta_cutoff
 from bot_algorithms.voronoi_heuristic import *
 from tronproblem import *
 from trontypes import CellType, PowerupType
@@ -26,7 +26,8 @@ class StudentBot:
         To get started, you can get the current
         state by calling asp.get_start_state()
         """
-        direction = alpha_beta_cutoff(asp, 8, arjun_voronoi)
+        # direction = alpha_beta_cutoff2(asp, 5)
+        direction = alpha_beta_cutoff(asp, 9, voronoi_v2)
         return direction
         # return "U"
 
@@ -47,35 +48,6 @@ class StudentBot:
         # ian alpha beta with special
         # special alpha beta with arjun voronoi:
         # special alpha beta with ian voronoi
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

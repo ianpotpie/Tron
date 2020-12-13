@@ -124,6 +124,7 @@ def main():
             game = TronProblem(args.map, i % 2)
             outcome = run_game(game, bots, visualizer, delay, wait, colored)
             winner = outcome.index(1)
+            print("Player %s won!" % (winner+1))
             winners[winner] += 1
             for bot in bots:
                 bot.cleanup()

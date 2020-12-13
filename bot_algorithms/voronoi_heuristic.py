@@ -51,7 +51,7 @@ def naive_voronoi(state):
 ########################################################################################################################
 
 
-def voronoi_v1(state):
+def voronoi_v1(state, curr_player):
     """
     Input:
         A Game State
@@ -61,7 +61,6 @@ def voronoi_v1(state):
     """
 
     # initialize game info
-    player_to_move = state.ptm
     player_locs = state.player_locs
     num_players = len(player_locs)
     board = state.board
@@ -78,7 +77,7 @@ def voronoi_v1(state):
 
     # We cycle through the players in the order that their turns will take place. We begin with the player who is about
     # to move. We know we are done when there are no cells left to explore
-    expanding_player = player_to_move
+    expanding_player = curr_player
     empty_frontiers = 0
     while empty_frontiers < num_players:
         next_frontier = set()
@@ -110,7 +109,7 @@ def voronoi_v1(state):
     # the sum of the sizes of all the other player's voronoi spaces
     player_score = 0
     for player, voronoi in enumerate(voronoi_sets):
-        if player == player_to_move:
+        if player == curr_player:
             player_score += len(voronoi)
         else:
             player_score -= len(voronoi)
@@ -122,7 +121,7 @@ def voronoi_v1(state):
 ########################################################################################################################
 
 
-def voronoi_v2(state):
+def voronoi_v2(state, curr_player):
     """
     Input:
         A Game State
@@ -132,7 +131,6 @@ def voronoi_v2(state):
     """
 
     # initialize game info
-    player_to_move = state.ptm
     player_locs = state.player_locs
     num_players = len(player_locs)
     voronoi_sizes = np.zeros(num_players)
@@ -150,7 +148,7 @@ def voronoi_v2(state):
 
     # We cycle through the players in the order that their turns will take place. We begin with the player who is about
     # to move. We know we are done when there are no cells left to explore
-    expanding_player = player_to_move
+    expanding_player = curr_player
     empty_frontiers = 0
     while empty_frontiers < num_players:
         next_frontier = set()
@@ -174,20 +172,21 @@ def voronoi_v2(state):
         frontier_sets[expanding_player] = next_frontier
         if len(next_frontier) == 0:
             empty_frontiers += 1
-        else:
-            empty_frontiers = 0
         expanding_player = (expanding_player + 1) % num_players
 
     # the player's score is tallied by taking the difference between the size of their voronoi, and
     # the sum of the sizes of all the other player's voronoi spaces
     player_score = 0
     for player, size in enumerate(voronoi_sizes):
-        if player == player_to_move:
+        if player == curr_player:
             player_score += size
         else:
             player_score -= size
 
     return player_score
+
+
+########################################################################################################################
 
 
 def calculate_player_square_distances(state):
@@ -227,7 +226,7 @@ def calculate_player_square_distances(state):
     return output
 
 
-def arjun_voronoi(player, state):
+def arjun_voronoi(state, player):
     distance_holder = calculate_player_square_distances(state)
 
     difference_in_distances = distance_holder[0] - distance_holder[1]  # A negative value for the above -> p1 is closer. positive -> p2 is closer.

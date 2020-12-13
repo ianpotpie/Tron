@@ -45,7 +45,6 @@ def alpha_beta_cutoff(asp, cutoff_ply, eval_func):
             alpha = next_score
             optimal_move = action
 
-    print("optimal move is:", optimal_move)
     return optimal_move
 
 
@@ -62,7 +61,7 @@ def cutoff_ab_max_value(asp, state, player, alpha, beta, depth, eval_func):
     if asp.is_terminal_state(state):
         return asp.evaluate_state(state)[player]
     elif depth == 0:
-        return eval_func(player,state)
+        return eval_func(state,player)
     else:
         max_score = float("-inf")
         for action in asp.get_available_actions(state):
@@ -89,7 +88,7 @@ def cutoff_ab_min_value(asp, state, player, alpha, beta, depth, eval_func):
     if asp.is_terminal_state(state):
         return asp.evaluate_state(state)[player]
     elif depth <= 0:
-        return eval_func(player, state)
+        return eval_func(state,  player)
     else:
         min_score = float("inf")
         for action in asp.get_available_actions(state):

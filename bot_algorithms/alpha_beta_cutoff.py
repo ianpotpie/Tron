@@ -1,4 +1,5 @@
 import math
+from adversarialsearchproblem import AdversarialSearchProblem
 
 def alpha_beta_cutoff(asp, cutoff_ply, eval_func):
     """
@@ -61,7 +62,7 @@ def cutoff_ab_max_value(asp, state, player, alpha, beta, depth, eval_func):
     if asp.is_terminal_state(state):
         return asp.evaluate_state(state)[player]
     elif depth == 0:
-        return eval_func(state)
+        return eval_func(player,state)
     else:
         max_score = float("-inf")
         for action in asp.get_available_actions(state):
@@ -87,8 +88,8 @@ def cutoff_ab_min_value(asp, state, player, alpha, beta, depth, eval_func):
     """
     if asp.is_terminal_state(state):
         return asp.evaluate_state(state)[player]
-    elif depth == 0:
-        return eval_func(state)
+    elif depth <= 0:
+        return eval_func(player, state)
     else:
         min_score = float("inf")
         for action in asp.get_available_actions(state):

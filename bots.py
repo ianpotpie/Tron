@@ -6,6 +6,9 @@ from bot_algorithms.voronoi_heuristic import *
 from tronproblem import *
 from trontypes import CellType, PowerupType
 import random, math
+from bot_algorithms.alpha_beta_cutoff_2 import alpha_beta_cutoff2, voronoi
+
+
 
 #import the algoriths for our bot
 
@@ -23,9 +26,58 @@ class StudentBot:
         To get started, you can get the current
         state by calling asp.get_start_state()
         """
-        direction = alpha_beta_cutoff(asp, 5, voronoi_v2)
+        direction = alpha_beta_cutoff(asp, 8, arjun_voronoi)
         return direction
         # return "U"
+
+
+
+
+        #Performance cutoffs
+
+
+
+
+        # results:
+        # arjun alpha beta, arjun voronoi:
+        # ian alpha beta, ian vornoi:
+        # arjun alpha beta, ian voronoi
+        # ian alpha beta, arjun vornoi:
+        # arjun alpha beta with special voronoi:
+        # ian alpha beta with special
+        # special alpha beta with arjun voronoi:
+        # special alpha beta with ian voronoi
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     def cleanup(self):
         """

@@ -40,7 +40,7 @@ They will go UP this round."""
                 )
             decision = "U"
         except:  # Exception:
-            # traceback.print_exc()  # pylint: disable=bare-except
+            traceback.print_exc()  # pylint: disable=bare-except
             if visualizer:
                 print(
                     """Warning. The move for player %s encountered an unexpected error.

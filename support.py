@@ -13,8 +13,10 @@ import ta_bots
 def determine_bot_functions(bot_names):
     bot_list = []
     for name in bot_names:
-        if name == "student":
-            bot_list.append(bots.StudentBot())
+        if name == "student1":
+            bot_list.append(bots.StudentBot1())
+        elif name == "student2":
+            bot_list.append(bots.StudentBot2())
         elif name == "random":
             bot_list.append(bots.RandBot())
         elif name == "wall":

@@ -204,7 +204,7 @@ def voronoi_v3(state, curr_player):
     # initialize game info
     player_locs = state.player_locs
     num_players = len(player_locs)
-    voronoi_sizes = np.zeros(num_players)
+    voronoi_values = np.zeros(num_players)
     board = state.board
 
     # initialize the voronoi cells for each player with the cell that they currently occupy
@@ -222,7 +222,6 @@ def voronoi_v3(state, curr_player):
         # adds the frontier to the voronoi space, and expands where it can
         for cell in frontier_sets[expanding_player]:
             explored_cells.add(cell)
-            voronoi_sizes[expanding_player] += 1
 
             def viable_cell(cell_row, cell_col):
                 val = board[cell_row][cell_col]
@@ -232,14 +231,28 @@ def voronoi_v3(state, curr_player):
             col = cell[1]
 
             # if the cell is available, then it is added to the voronoi and expand the frontier
+            open_neighbors = 0
             if viable_cell(row+1, col):
                 next_frontier.add((row + 1, col))
+                open_neighbors += 1
             if viable_cell(row-1, col):
                 next_frontier.add((row - 1, col))
+                open_neighbors += 1
             if viable_cell(row, col+1):
                 next_frontier.add((row, col + 1))
+                open_neighbors += 1
             if viable_cell(row, col-1):
                 next_frontier.add((row, col - 1))
+                open_neighbors += 1
+
+            if open_neighbors == 3:
+                voronoi_values[expanding_player] += 4
+            elif open_neighbors == 2:
+                voronoi_values[expanding_player] += 4
+            elif open_neighbors == 1:
+                voronoi_values[expanding_player] += 4
+            elif open_neighbors == 0:
+                voronoi_values[expanding_player] += 1
 
         # update the frontier and begin calculating the voronoi space of the new
         frontier_sets[expanding_player] = next_frontier
@@ -252,7 +265,7 @@ def voronoi_v3(state, curr_player):
     # the player's score is tallied by taking the difference between the size of their voronoi, and
     # the sum of the sizes of all the other player's voronoi spaces
     player_score = 0
-    for player, size in enumerate(voronoi_sizes):
+    for player, size in enumerate(voronoi_values):
         if player == curr_player:
             player_score += size
         else:

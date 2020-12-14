@@ -4,6 +4,8 @@ from adversarialsearchproblem import AdversarialSearchProblem
 from bot_algorithms.voronoi_heuristic import voronoi_v3
 
 
+"""This file is just so that the optimzer can quickly run a number of tests using the updated voronoi heuristic."""
+
 def alpha_beta_custom_voronoi(asp, cutoff_ply, weights):
     """
     This function should:
@@ -102,7 +104,7 @@ def cutoff_ab_min_value(asp, state, player, alpha, beta, depth, weights):
         min_score = math.inf
         for action in asp.get_available_actions(state):
             next_state = asp.transition(state, action)
-            next_score = cutoff_ab_max_value(asp, next_state, player, alpha, beta, depth - 1)
+            next_score = cutoff_ab_max_value(asp, next_state, player, alpha, beta, depth - 1, weights)
             if next_score <= alpha:  # if a value is found below the lower bound we prune
                 return next_score
             if next_score < beta:  # if a value is found below the upper bound we decrease beta

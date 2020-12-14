@@ -5,7 +5,6 @@ from collections import defaultdict
 import support
 import random
 import numpy as np
-import traceback
 
 
 def run_game(asp, bots, visualizer=None, delay=0.2, max_wait=0.3, colored=True):
@@ -39,8 +38,7 @@ They will go UP this round."""
                     % (state.ptm + 1)
                 )
             decision = "U"
-        except:  # Exception:
-            traceback.print_exc()  # pylint: disable=bare-except
+        except:  # pylint: disable=bare-except
             if visualizer:
                 print(
                     """Warning. The move for player %s encountered an unexpected error.
@@ -48,7 +46,7 @@ They will go UP this round."""
                     % (state.ptm + 1)
                 )
             decision = "U"
-        
+
         signal.setitimer(signal.ITIMER_REAL, 0)
 
         available_actions = asp.get_available_actions(state)
@@ -79,7 +77,7 @@ def main():
         "-max_wait",
         type=float,
         help=HelpMessage.MAX_WAIT,
-        default= Argument_Defaults.MAX_WAIT,
+        default=Argument_Defaults.MAX_WAIT,
     )
     parser.add_argument(
         "-bots",
@@ -124,7 +122,6 @@ def main():
             game = TronProblem(args.map, i % 2)
             outcome = run_game(game, bots, visualizer, delay, wait, colored)
             winner = outcome.index(1)
-            print("Player %s won!" % (winner+1))
             winners[winner] += 1
             for bot in bots:
                 bot.cleanup()
@@ -140,44 +137,44 @@ def main():
 
 class Argument_Defaults:
     MAP = "./maps/small_room.txt"
-    MAX_WAIT = 1.0 # * 10000
+    MAX_WAIT = 1.0
     BOTS = ["random", "random"]
     IMAGE_DELAY = 0.2
 
 
 class HelpMessage:
     MAP = (
-        '''the filename of the map to use for this game.
-        Defaults to "'''
-        + Argument_Defaults.MAP
-        + """."""
+            '''the filename of the map to use for this game.
+            Defaults to "'''
+            + Argument_Defaults.MAP
+            + """."""
     )
     MAX_WAIT = (
-        """The amount of time (in seconds) the game engine will wait
-        for a player to decide what move they want to make. If the player takes too long,
-        they go north. Defaults to """
-        + str(Argument_Defaults.MAX_WAIT)
-        + """ (this
+            """The amount of time (in seconds) the game engine will wait
+            for a player to decide what move they want to make. If the player takes too long,
+            they go north. Defaults to """
+            + str(Argument_Defaults.MAX_WAIT)
+            + """ (this
         will be reset during grading)."""
     )
     BOTS = (
-        '''which bot each player will use. Valid bot types include "student",
-        "wall", "random", "ta1", "ta2". This argument takes in a sequnce of bot types,
-        where the first bot is used for the first player, the second bot is for the second
-        player, and so on. Defaults to "'''
-        + Argument_Defaults.BOTS[0]
-        + """
+            '''which bot each player will use. Valid bot types include "student",
+            "wall", "random", "ta1", "ta2". This argument takes in a sequnce of bot types,
+            where the first bot is used for the first player, the second bot is for the second
+            player, and so on. Defaults to "'''
+            + Argument_Defaults.BOTS[0]
+            + """
          """
-        + Argument_Defaults.BOTS[1]
-        + """". Note that errors will occur if there
+            + Argument_Defaults.BOTS[1]
+            + """". Note that errors will occur if there
         are not enough AIs for the number of players on the board."""
     )
     IMAGE_DELAY = (
-        """The amount of time (in seconds) to wait after printing the current
-        state of the game. This is just to give users more time to watch the game progress.
-        Defaults to """
-        + str(Argument_Defaults.IMAGE_DELAY)
-        + """."""
+            """The amount of time (in seconds) to wait after printing the current
+            state of the game. This is just to give users more time to watch the game progress.
+            Defaults to """
+            + str(Argument_Defaults.IMAGE_DELAY)
+            + """."""
     )
     NO_IMAGE = """include this flag (with no arguments) to suppress the output of all
         board states and just get final results"""

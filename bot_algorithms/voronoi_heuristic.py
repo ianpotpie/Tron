@@ -192,7 +192,7 @@ def voronoi_v2(state, curr_player):
 ########################################################################################################################
 
 
-def voronoi_v3(state, curr_player, weights):
+def voronoi_v3(state, curr_player):
     """
     Input:
         A Game State
@@ -246,13 +246,13 @@ def voronoi_v3(state, curr_player, weights):
                 open_neighbors += 1
 
             if open_neighbors == 3:
-                voronoi_values[expanding_player] += weights[3]
+                voronoi_values[expanding_player] += 4
             elif open_neighbors == 2:
-                voronoi_values[expanding_player] += weights[2]
+                voronoi_values[expanding_player] += 4
             elif open_neighbors == 1:
-                voronoi_values[expanding_player] += weights[1]
+                voronoi_values[expanding_player] += 4
             elif open_neighbors == 0:
-                voronoi_values[expanding_player] += weights[0]
+                voronoi_values[expanding_player] += 1
 
         # update the frontier and begin calculating the voronoi space of the new
         frontier_sets[expanding_player] = next_frontier
@@ -273,66 +273,3 @@ def voronoi_v3(state, curr_player, weights):
 
     return player_score
 
-
-########################################################################################################################
-
-
-def calculate_player_square_distances(state):
-    """This function takes a state as input and calculates the distances between each player and each location"""
-
-    player_locations = state.player_locs  # Storing the locations of players. # is this line necessary?
-    np_board = np.array(state.board)  # Storing the board as a numpy array so that we can operate on it
-    players = np.arange(len(player_locations))  # There are just two players indexed as such
-
-    output = []  # Will eventually contain the distances
-
-    for player in players:
-
-        distances = np.ones(np_board.shape)  # This will represent the board as a grid, with each celling representing the distance
-        distances.fill(float('inf'))  # This line sets all the distances initially to be infinity
-        distances[player_locations[player]] = 0  # Player is 0 units away from their start location
-
-        pq = PriorityQueue()  # This priority queue will contain locations
-        pq.put((0, player_locations[player]))  # The first item in the priority queue is the start location; priority (equivalently, distance) = 0
-
-        while not pq.empty():
-            distance, location = pq.get()  # popping from the pq
-
-            # We need to find the adjacent squares in this step in order to calculate distances
-            x_pos = location[0]
-            y_pos = location[1]
-            adjacent_squares = [(x_pos + 1, y_pos), (x_pos-1, y_pos), (x_pos, y_pos+1), (x_pos, y_pos-1)]
-
-            # Now, we loop through the adjacent squares
-            for square in adjacent_squares:
-                if not (np_board[square] == '#' or np_board[square] == 'x'):  # If the spot on the board is not a wall or permanent wall
-                    if distances[square] == float('inf') or distances[square] > distance+1:  # If the square is hitherto unreached
-                        pq.put((distance + 1, square))  # We add it to the pq
-                        distances[square] = distance + 1  # We mark it as being one step farther from the player than current square
-        output.append(distances.flatten())  # Building output
-
-    return output
-
-
-def arjun_voronoi(state, player):
-    distance_holder = calculate_player_square_distances(state)
-
-    difference_in_distances = distance_holder[0] - distance_holder[1]  # A negative value for the above -> p1 is closer. positive -> p2 is closer.
-    size = len(difference_in_distances)
-
-    accumulator = 0  # This is where we actually calculate "voronoi"
-    for k in range(size):
-        # There are four possibilities
-        if (distance_holder[0])[k] >= 0 and distance_holder[1][k] == float('inf'):  # Accessible to 1; not 2
-            accumulator = accumulator + 1
-        elif (distance_holder[0])[k] == float('inf') and distance_holder[1][k] >= 0:
-            accumulator = accumulator - 1
-        elif difference_in_distances[k] < 0:
-            accumulator = accumulator + 1
-        elif difference_in_distances[k] > 0:
-            accumulator = accumulator - 1
-
-    if player == 0:
-        return accumulator
-    if player == 1:
-        return -1 * accumulator

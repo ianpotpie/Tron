@@ -1,6 +1,8 @@
 #!/usr/bin/python
 
 import numpy as np
+
+from bot_algorithms.alpha_beta_custom_voronoi import alpha_beta_custom_voronoi
 from bot_algorithms.ian_alpha_beta_cutoff import alpha_beta_cutoff
 from bot_algorithms.voronoi_heuristic import *
 from tronproblem import *
@@ -8,9 +10,9 @@ from trontypes import CellType, PowerupType
 import random, math
 from bot_algorithms.alpha_beta_cutoff_2 import alpha_beta_cutoff2, voronoi
 
-cutoff = 8
+cutoff = 2
 
-class StudentBot1:
+class StudentBot:
     """ Write your student bot here"""
 
     def decide(self, asp):
@@ -62,6 +64,8 @@ class StudentBot1:
 
 class StudentBot2:
     """ Write your student bot here"""
+    def __init__(self, weights):
+        self.weights = weights
 
     def decide(self, asp):
         """
@@ -72,7 +76,8 @@ class StudentBot2:
         state by calling asp.get_start_state()
         """
         # direction = alpha_beta_cutoff2(asp, 5)
-        direction = alpha_beta_cutoff(asp, cutoff, voronoi_v3)
+        # direction = alpha_beta_cutoff(asp, cutoff, voronoi_v3)
+        direction = alpha_beta_custom_voronoi(asp, cutoff, self.weights)
         return direction
         # return "U"
 

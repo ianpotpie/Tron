@@ -192,7 +192,7 @@ def voronoi_v2(state, curr_player):
 ########################################################################################################################
 
 
-def voronoi_v3(state, curr_player):
+def voronoi_v3(state, curr_player, weights):
     """
     Input:
         A Game State
@@ -246,13 +246,13 @@ def voronoi_v3(state, curr_player):
                 open_neighbors += 1
 
             if open_neighbors == 3:
-                voronoi_values[expanding_player] += 4
+                voronoi_values[expanding_player] += weights[3]
             elif open_neighbors == 2:
-                voronoi_values[expanding_player] += 4
+                voronoi_values[expanding_player] += weights[2]
             elif open_neighbors == 1:
-                voronoi_values[expanding_player] += 4
+                voronoi_values[expanding_player] += weights[1]
             elif open_neighbors == 0:
-                voronoi_values[expanding_player] += 1
+                voronoi_values[expanding_player] += weights[0]
 
         # update the frontier and begin calculating the voronoi space of the new
         frontier_sets[expanding_player] = next_frontier
